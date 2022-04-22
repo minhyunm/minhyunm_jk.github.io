@@ -1,7 +1,17 @@
 ---
 title:  "TestingTest"
 date:   2022-04-06 09:50:00
-categories: [jekyll]
-tags: [jekyll]
+categories: 
+tags: 
 ---
-YAS
+YAS<br>
+줄바꿈은 html태그 써야되는구나<br>
+`이렇게` 하면 강조<br>
+```angular2html
+이렇게
+```
+하면 참조<br>
+[이렇게][thisandthat] 하면 링크<br>
+까릿
+
+[thisandthat]: http://naver.com
