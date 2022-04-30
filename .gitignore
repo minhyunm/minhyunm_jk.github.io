@@ -6,4 +6,5 @@ _site
 *.sublime-workspace
 .DS_Store
 Gemfile.lock
+.idea/
 _posts/2016-01-08-test.markdown

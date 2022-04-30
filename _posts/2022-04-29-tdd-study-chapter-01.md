@@ -37,12 +37,12 @@ assert 'Django' in browser.title
 당황하지 않고 에러메시지를 그대로 쭉 긁어 검색을 돌린 결과...<br>
 대충 geckodriver가 있어야 selenium에서 타 브라우저를 자유롭게 쓸 수 있다는 내용인 듯한 스택오버플로우 글들이 좌라락 떴고<br>
 뚝딱이처럼 나는 그냥 그들이 시키는 대로 geckodriver를 깔았다.<br>
-```python
+```commandline
 brew install geckodriver
 ```
 간단!<br>
 이제 됐겠지<br>
-```python
+```commandline
 selenium.common.exceptions.SessionNotCreatedException: Message: Expected browser binary location, but unable to find binary in default location, no 'moz:firefoxOptions.binary' capability provided, and no binary flag set on the command line
 ```
 응 안됐음<br>
@@ -68,14 +68,14 @@ selenium.common.exceptions.SessionNotCreatedException: Message: Expected browser
 
 자 그러면 이제 드디어 본격적으로 장고 프로젝트를 만들 시간이 왔다. 나참 챕터1부터 이렇게 고될 일인지? 물론 그건 다 내가 바보인 탓이지만<br>
 아무튼 익숙한 방식으로 대충 장고 프로젝트를 하나 만든다. 여기서는 superlists라는 이름으로 만들었길래 나도 그대로 했다.<br>
-```python
+```commandline
 django-admin startproject superlists
 ```
 여기서 주의할 점 : 책에서는 django-admin.py 를 써서 만들라고 되어있지만 그대로 했다간 이건 더 이상 지원이 되지 않는다는 뭐 그런 비슷한 경고를 직면하게 된다.<br>
 경고만 뜨고 플젝생성은 제대로 해주긴 하는데 아무튼 장고에서 바꿔달라고 하니까 .py는 빼고 바꿔주는 게 정신건강에 좋을 듯하다.<br><br>
 그 뒤엔 아까 만든 functional_tests.py를 프로젝트 내부 바닥 위치에 옮겨주고(mv 명령어를 쓰시든 그냥 복사붙여넣기 하시든 취향껏 하시라)<br>
 우리의 칭구 runserver를 입력한다.
-```python
+```commandline
 python manage.py runserver
 ```
 런서버가 문제없이 진행되어서 127.0.0.1:8000 어쩌구 중지하려거든 컨트롤C를 누르시오 까지 떴다면 이제 다시 아까의 테스트파일을 실행해 본다.<br>
@@ -135,12 +135,11 @@ from selenium import webdriver
  browser.quit()
 
 ```
-주석 내용은 스토리 흐름만 비슷하면 되니까 책이랑 좀 다르게 썼다.<br>
 추가가 완료되었으면 runserver를 통해 서버를 시작한 뒤 테스트를 실행한다.<br>
 위의 내용을 보면 assertion이 타이틀에서 'To-Do'를 찾도록 수정되었는데, 현재 해당 내용은 적용되어 있지 않으므로 오류가 날 것이다.<br>
 여기서는 오류 메시지를 좀 더 명확히 표시하기 위해  실제 표시된 타이틀을 함께 출력하도록 추가했다.<br><br>
 오류 내용은 아래와 같다.<br>
-```python
+```commandline
 AssertionError: Browser title was The install worked successfully! Congratulations!
 ```
 
@@ -188,13 +187,30 @@ class NewVisitorTest(unittest.TestCase):
 
         # 이용을 마친다
 
-    # 해당 스크립트가 커맨드라인을 통해 실행되었을 경우에만 unittest 가동
-    if __name__ == '__main__':
-        unittest.main(warnings='ignore')
+        
+# 해당 스크립트가 커맨드라인을 통해 실행되었을 경우에만 unittest 가동
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
 ```
-이제 실행하면 FAIL이 떠야 정상...인데, 이상하게 나의 코드는 계속 OK만 뜬다.<br>
-대관절 이게 무슨 일이냐...<br><br>
+이제 실행하면 아래와 같이 실패 메시지가 뜬다. 만세!<br>
+```commandline
+F
+======================================================================
+FAIL: test_can_start_a_list_and_retrieve_it_later (__main__.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "functional_test.py", line 21, in test_can_start_a_list_and_retrieve_it_later
+    self.assertIn('To-Do', self.browser.title)  # 테스트용 어설션을 위해 assertIn 사용
+AssertionError: 'To-Do' not found in 'The install worked successfully! Congratulations!'
+
+----------------------------------------------------------------------
+Ran 1 test in 2.095s
+
+FAILED (failures=1)
+```
+<br><br>
 
 #### 유용한 TDD 개념
 * 사용자 스토리(User story) : 사용자 관점에서 어떻게 애플리케이션이 동작해야 하는지 기술한 것. 기능 테스트 구조화를 위해 사용
 * 예측된 실패(Expected failure) : 의도적으로 구현한 테스트 실패
+
