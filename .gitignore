@@ -8,3 +8,4 @@ _site
 Gemfile.lock
 .idea/
 _posts/2016-01-08-test.markdown
+vendor/
