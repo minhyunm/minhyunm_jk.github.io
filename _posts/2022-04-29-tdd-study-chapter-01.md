@@ -43,7 +43,10 @@ brew install geckodriver
 간단!<br>
 이제 됐겠지<br>
 ```commandline
-selenium.common.exceptions.SessionNotCreatedException: Message: Expected browser binary location, but unable to find binary in default location, no 'moz:firefoxOptions.binary' capability provided, and no binary flag set on the command line
+selenium.common.exceptions.SessionNotCreatedException:
+Message: Expected browser binary location, 
+but unable to find binary in default location, no 'moz:firefoxOptions.binary' 
+capability provided, and no binary flag set on the command line
 ```
 응 안됐음<br>
 이것은 또 무엇이냐... 변함없이 내 친구 스택오버플로우를 찾아서 별 이상한 방법들을 다 시도해 봤으나<br>

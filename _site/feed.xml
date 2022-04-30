@@ -5,8 +5,8 @@
     <description>.</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 30 Apr 2022 22:08:11 +0900</pubDate>
-    <lastBuildDate>Sat, 30 Apr 2022 22:08:11 +0900</lastBuildDate>
+    <pubDate>Sat, 30 Apr 2022 22:28:06 +0900</pubDate>
+    <lastBuildDate>Sat, 30 Apr 2022 22:28:06 +0900</lastBuildDate>
     <generator>Jekyll v3.9.2</generator>
     
       <item>
@@ -49,7 +49,10 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;간단!&lt;br /&gt;
 이제 됐겠지&lt;br /&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-commandline&quot;&gt;selenium.common.exceptions.SessionNotCreatedException: Message: Expected browser binary location, but unable to find binary in default location, no 'moz:firefoxOptions.binary' capability provided, and no binary flag set on the command line
+&lt;pre&gt;&lt;code class=&quot;language-commandline&quot;&gt;selenium.common.exceptions.SessionNotCreatedException:
+Message: Expected browser binary location, 
+but unable to find binary in default location, no 'moz:firefoxOptions.binary' 
+capability provided, and no binary flag set on the command line
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;응 안됐음&lt;br /&gt;
 이것은 또 무엇이냐… 변함없이 내 친구 스택오버플로우를 찾아서 별 이상한 방법들을 다 시도해 봤으나&lt;br /&gt;
