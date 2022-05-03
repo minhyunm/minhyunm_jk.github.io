@@ -5,9 +5,203 @@
     <description>.</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 30 Apr 2022 22:28:06 +0900</pubDate>
-    <lastBuildDate>Sat, 30 Apr 2022 22:28:06 +0900</lastBuildDate>
+    <pubDate>Tue, 03 May 2022 23:22:03 +0900</pubDate>
+    <lastBuildDate>Tue, 03 May 2022 23:22:03 +0900</lastBuildDate>
     <generator>Jekyll v3.9.2</generator>
+    
+      <item>
+        <title>TDD Study : week 2</title>
+        <description>&lt;h3 id=&quot;부제--이건-뭐야-도자기-깨는-장인이야&quot;&gt;부제 : 이건… 뭐야…? 도자기 깨는 장인이야…?&lt;/h3&gt;
+&lt;p&gt;&lt;br /&gt;
+참고서적 : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;클린 코드를 위한 테스트 주도 개발(해리 J.W. 퍼시벌 저)&lt;/code&gt;&lt;br /&gt;
+환경 : &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Mac(M1)&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Python 3.8.3&lt;/code&gt;,  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Django 4.0.4&lt;/code&gt;,  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Selenium 4.1.3&lt;/code&gt;,  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Firefox&lt;/code&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;chapter-03-단위-테스트를-이용한-간단한-홈페이지-테스트&quot;&gt;Chapter 03. 단위 테스트를 이용한 간단한 홈페이지 테스트&lt;br /&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;br /&gt;
+앞서 진행한 내용에 좀 더 살을 붙여보도록 하겠다.&lt;br /&gt;
+지난 기능 테스트에 작성했듯이 타이틀에 ‘To-Do’라는 문구를 넣어주는 내용도 아마… 추가되겠지?&lt;br /&gt;
+그리고 무엇보다 이번 챕터에서는 앱 단위로 개발 테스트를 진행한다.&lt;br /&gt;
+즉 단위 테스트(Unit test)를 작성한다!&lt;br /&gt;
+이쯤에서 잠깐… 단위 테스트와 기능 테스트의 정확한 차이점이 무엇인지를 짚고 넘어가 보도록 하자.&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;단위-테스트-vs-기능-테스트&quot;&gt;단위 테스트 vs 기능 테스트&lt;br /&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;기능 테스트 : 사용자 관점에서 애플리케이션 외부를 테스트&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;단위 테스트 : 프로그래머 관점에서 애플리케이션 내부를 테스트&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;즉 어떤 시점에서 테스트를 진행하느냐에 따라 기능/단위 테스트로 나뉘고,&lt;br /&gt;
+때문에 기능 테스트와 단위 테스트는 테스트 스토리부터 방식, 테스트 대상이 차이가 날 수밖에 없다.&lt;br /&gt;
+이전까지 이 둘의 개념이 좀 모호했는데 이렇게 보니 굉장히 확연히 다른 개념이었던 것이다…&lt;br /&gt;
+아는 만큼 보인다고… 공부 열심히 해야지… 기승전공부…&lt;br /&gt;
+&lt;br /&gt;
+아무튼 그리하여 이 책을 통해 우리가 개발해나가는 방식은 아래와 같은 순서로 이루어질 예정이다.&lt;br /&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;기능테스트 작성(사용자 관점의 기능성을 정의)&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;기능 테스트가 실패하는 것을 확인 -&amp;gt; 어떤 코드로 테스트를 통과시킬 수 있을지에 대해 고민 -&amp;gt; 단위 테스트를 작성하여 코드가 동작해야 하는 방향성을 정의&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;단위 테스트가 실패하는 것을 확인 -&amp;gt; 단위 테스트를 통과할 수 있을 정도의 최소한의 코드를 작성 -&amp;gt; 반복(기능 테스트가 완전해질 때까지)&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;기능 테스트 재실행하여 동작여부 확인(이 단계에 단위 테스트를 추가로 작성해야 할 수 있음)&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;즉 기능 테스트는 상위 레벨의 개발을, 단위 테스트는 하위 레벨의 개발을 주도한다.&lt;br /&gt;
+전체 플로우와 이에 대한 적합성 여부를 판단하는 것은 기능 테스트, 그리고 각 내용 하나하나가 정상동작하는지를 확인하는 것은 단위 테스트라고 생각할 수 있겠다.&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;그럼 이제 슬슬 작업할 앱을 생성해 보자.&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;python&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startapp&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lists&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;앱 이름은 책에서 진행한 내용과 동일하게 lists로 넣어봤다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;그 다음은 단위 테스트를 작성할 차례다.&lt;br /&gt;
+startapp 명령어를 통해 자동 생성된 lists 앱 내부의 파일 중에서 tests.py를 눌러본다. 물론 지금은 django.test에서 TestCase를 임포트한 내용 말고는 아무 것도 적혀있지 않다. 이 TestCase는 앞서 사용했던 unittest.TestCase의 확장 버전이다. 이 파일에 고의적인 실패 테스트를 만들어 본다.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.test&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestCase&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SmokeTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestCase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_bad_maths&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;assertEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;내용을 보아하니 1+1과 3이 동일한 값인지를 확인하는 테스트인 듯하다.&lt;br /&gt;
+이제 아래의 명령어를 입력하면 테스트를 진행한다.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;python&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;1+1이 3일리 없으니 이 테스트는 반드시 오류를 리턴하게 되어 있다.&lt;br /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-command&quot;&gt;Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+F
+======================================================================
+FAIL: test_bad_maths (lists.tests.SmokeTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/Users/minh/PycharmProjects/tdd_study/superlists/lists/tests.py&quot;,
+	line 7, in test_bad_maths
+    self.assertEqual(1 + 1, 3)
+AssertionError: 2 != 3
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+Destroying test database for alias 'default'...
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;굳&lt;br /&gt;
+&lt;br /&gt;
+그럼 이제 앱 내용을 작성해야 한다.&lt;br /&gt;
+장고가 어떠한 요청을 받아 처리하는 과정은&lt;br /&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;특정 url에 대한 http request를 받음&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;특정 규칙을 이용해 해당 request에 맞는 view 함수를 결정(url 해석)&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;요청을 처리하여 http response로 반환&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;와 같으므로 우리가 테스트해야 할 내용은 해당 url의 해석이 제대로 이루어지는지 &amp;amp; 올바른 html를 반환하여 기능테스트를 통과하는지 의 두 가지이다.&lt;br /&gt;
+&lt;br /&gt;
+이에 맞는 테스트코드를 작성해 본다.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.urls&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resolve&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.test&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestCase&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lists.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SmokeTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestCase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_root_url_resolves_to_home_page_view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;assertEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;여기서 첫 번째 줄은 from django.core.urlresolvers import resolve 라고 되어있었는데&lt;br /&gt;
+이게 장고 1.x 버전대 코드라 수정을 해주었다.&lt;br /&gt;
+이 내용은 대략 url로 ‘/’가 호출되면 resolve를 실행하여 home_page라는 함수를 호출하라는 내용이다.&lt;br /&gt;
+그 후 해당 함수가 home_page 함수가 맞는지를 확인하는 코드가 들어간다.&lt;br /&gt;
+이제 코드를 실행하면 오류 메시지는 ImportError: cannot import name ‘home_page’ from ‘lists.views’ 라고 뜬다.&lt;br /&gt;
+아직 home_page라는 함수를 만든 적이 없으니 당연하다.&lt;br /&gt;
+&lt;br /&gt;
+문제는 여기서부터이다. 책에서는 지금부터 본격 TDD의 시작이기 때문에 한 번에 한 줄의 코드만 수정해 갈 것이라고 적혀 있다.&lt;br /&gt;
+벌써부터 속이 터진다. 하지만 별 수 없지.&lt;br /&gt;
+&lt;br /&gt;
+먼저 시급한 문제인 home_page 함수의 부재를 처리해본다.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.shortcuts&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Create your views here.
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;앗 예상치 못했던 진행이다.&lt;br /&gt;
+TDD란 이렇게 언 발에 오줌 누기 형식으로 진행되는 것이란 말인가&lt;br /&gt;
+아무튼 다시 테스트를 돌리니 당연하지만 오류 메시지가 바뀌어 있다.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-command&quot;&gt;Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+E
+======================================================================
+ERROR: test_root_url_resolves_to_home_page_view (lists.tests.SmokeTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File &quot;/Users/minh/PycharmProjects/tdd_study/superlists/lists/tests.py&quot;, 
+	line 9, in test_root_url_resolves_to_home_page_view
+    found = resolve('/')
+  File &quot;/opt/homebrew/Caskroom/miniforge/base/envs/tdd_study/lib/python3.8/
+	site-packages/django/urls/base.py&quot;, line 24, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File &quot;/opt/homebrew/Caskroom/miniforge/base/envs/tdd_study/lib/python3.8/
+	site-packages/django/urls/resolvers.py&quot;, line 683, in resolve
+    raise Resolver404({&quot;tried&quot;: tried, &quot;path&quot;: new_path})
+django.urls.exceptions.Resolver404: {'tried': [[&amp;lt;URLResolver &amp;lt;URLPattern 
+list&amp;gt; (admin:admin) 'admin/'&amp;gt;]], 'path': ''}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)
+Destroying test database for alias 'default'...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;해당 url 패턴이 지정되어 있지 않기 때문에 오류가 난 것으로 확인된다.&lt;br /&gt;
+그렇겠지 urls를 안 건드렸으니까…&lt;br /&gt;
+그래서 이번에는 urls를 수습하러 떠난다.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.urls&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;urlpatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# path('admin/', admin.site.urls),
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'^$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'superlists.views.home'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'home'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;이번에도 변함없이 책에는 1.x 버전 장고에 맞춘 코드예제가 나와 있었는데 예를 들면&lt;br /&gt;
+include, url, patterns 같은 것들…&lt;br /&gt;
+include는 2버전대에서도 종종 써봤지만 아무튼&lt;br /&gt;
+patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하고, url은 path로 대치하여 코드를 작성했다.&lt;br /&gt;
+대충 url로 빈 문자열이 전달될 경우 home이라는 view 함수를 찾아가도록 만드는 내용이다.&lt;br /&gt;
+이대로 테스트를 돌리면 이제 또 에러 메시지가 바뀌어 있다.&lt;br /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-command&quot;&gt;TypeError: view must be a callable or a list/tuple in the case of include().
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;이번 에러메시지 너무 길어서 마지막 줄만 긁어옴; 이번은 타입에러다.&lt;br /&gt;
+근데 책에 나온 에러는 import error였기 때문에… 뭔가 버전차이가 또 있겠거니&lt;br /&gt;
+일단 내 에러메시지의 원인은 저 view 연결하는 부분인 것으로 보여서 뚝딱뚝딱 또 고쳐봤다.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.urls&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lists.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;urlpatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# path('admin/', admin.site.urls),
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'^$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'home'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;home_page가 계속 None 상태면 또 오류가 날 것이 분명하므로 이번에는 이쪽도 바꿔준다.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.shortcuts&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Create your views here.
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;그런데… 이번엔 다시 url 패턴 에러로 돌아가고 만다.&lt;br /&gt;
+대관절 무엇이 문제란 말인가ㅠ 버전 때문에 너무 뭘 많이 바꿔서…? 그래서 그런가??&lt;br /&gt;
+여기서 계속 막혀서 해결할 때까지 기록은 좀 쉬고… 일단 나머지 책을 읽어만 놓고 추후 수정을 해야겠음&lt;br /&gt;
+아 정말 개발 너무 싫다! ^^ㅗㅗㅗ&lt;/p&gt;
+</description>
+        <pubDate>Tue, 03 May 2022 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/2022/tdd-study-week-2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/tdd-study-week-2/</guid>
+        
+        
+      </item>
     
       <item>
         <title>TDD Study : week 1</title>
@@ -106,8 +300,8 @@ capability provided, and no binary flag set on the command line
 즉 프로그래머가 아닌 사람(기획자, QC담당자 등)이 보아도 한 눈에 이해할 수 있도록 주석 등으로 깔끔히 정리가 되어야 한다.&lt;br /&gt;
 FT만으로도 요구사항과 특징을 논의할 수 있어야 한다는데, TDD를 통해 개발 시간이 길어질 것을 생각하면 이런 부분에서 문서 단계를 줄이는 게 확실히 효율적일 것 같다.&lt;br /&gt;
 &lt;br /&gt;
-다시 우리가 만들던 To-Do 사이트로 돌아와서…이 챕터에서는 애자일(Agile) 개발 방식에서 진행하듯이 최소 기능 애플리케이션을 구축해 테스트를 하게 된다.&lt;br /&gt;
-먼저 사용자가 작업을 입력하고 이를 저장하는 기능을 구현하기로 한다.&lt;br /&gt;
+다시 우리가 만들던 To-Do 사이트로 돌아와서…이 챕터에서는 애자일(Agile) 개발 방식에서 진행하듯이 최소 기능 애플리케이션을 구축해 테스트 하는 것을 쬐끔 맛보기할 수 있다.&lt;br /&gt;
+먼저 사용자가 작업을 입력하고 이를 저장하는 기능을 구현하기 위한 준비에 들어간다.&lt;br /&gt;
 평소 같으면 바로 모델 설계에 들어갔겠지만 TDD이므로 다른 모든 작업에 앞서 챕터1에서 만들어둔 functional_tets.py 파일에 테스트용 스토리를 추가한다.&lt;br /&gt;&lt;/p&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;selenium&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webdriver&lt;/span&gt;
 
@@ -141,7 +335,7 @@ FT만으로도 요구사항과 특징을 논의할 수 있어야 한다는데, T
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;추가가 완료되었으면 runserver를 통해 서버를 시작한 뒤 테스트를 실행한다.&lt;br /&gt;
-위의 내용을 보면 assertion이 타이틀에서 ‘To-Do’를 찾도록 수정되었는데, 현재 해당 내용은 적용되어 있지 않으므로 오류가 날 것이다.&lt;br /&gt;
+위의 내용을 보면 assertion이 타이틀에서 ‘To-Do’를 찾도록 수정되었는데, 현재 해당 내용은 개발되어 있지 않으므로 오류가 날 것이다.&lt;br /&gt;
 여기서는 오류 메시지를 좀 더 명확히 표시하기 위해  실제 표시된 타이틀을 함께 출력하도록 추가했다.&lt;br /&gt;&lt;br /&gt;
 오류 내용은 아래와 같다.&lt;br /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-commandline&quot;&gt;AssertionError: Browser title was The install worked successfully! Congratulations!
