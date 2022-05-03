@@ -168,7 +168,9 @@ TypeError: view must be a callable or a list/tuple in the case of include().
 ```
 이번 에러메시지 너무 길어서 마지막 줄만 긁어옴; 이번은 타입에러다.<br>
 근데 책에 나온 에러는 import error였기 때문에... 뭔가 버전차이가 또 있겠거니<br>
-일단 내 에러메시지의 원인은 저 view 연결하는 부분인 것으로 보여서 뚝딱뚝딱 또 고쳐봤다.<br>
+일단 내 에러메시지의 원인은 urls에서 view 연결하는 부분인 것으로 보여서<br>
+책에 나온 import error랑 같이 뚝딱뚝딱 또 고쳐봤다.<br>
+(정규식이 사라진 이유는 버전차이 때문인지 그걸로 계속 오류가 나서...ㅠ)<br>
 ```python
 from django.contrib import admin
 from django.urls import path
@@ -176,7 +178,7 @@ from lists.views import home_page
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path(r'^$', home_page, name='home'),
+    path('', home_page, name='home'),
 ]
 ```
 home_page가 계속 None 상태면 또 오류가 날 것이 분명하므로 이번에는 이쪽도 바꿔준다.<br>
@@ -187,7 +189,15 @@ from django.shortcuts import render
 def home_page():
     pass
 ```
-그런데... 이번엔 다시 url 패턴 에러로 돌아가고 만다.<br>
-대관절 무엇이 문제란 말인가ㅠ 버전 때문에 너무 뭘 많이 바꿔서...? 그래서 그런가??<br>
-여기서 계속 막혀서 해결할 때까지 기록은 좀 쉬고... 일단 나머지 책을 읽어만 놓고 추후 수정을 해야겠음<br>
-아 정말 개발 너무 싫다! ^^ㅗㅗㅗ
+그리고 드디어 테스트를 통과했다.<br>
+
+```command
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+Destroying test database for alias 'default'...
+```

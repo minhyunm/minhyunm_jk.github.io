@@ -5,8 +5,8 @@
     <description>.</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 03 May 2022 23:22:03 +0900</pubDate>
-    <lastBuildDate>Tue, 03 May 2022 23:22:03 +0900</lastBuildDate>
+    <pubDate>Wed, 04 May 2022 08:11:54 +0900</pubDate>
+    <lastBuildDate>Wed, 04 May 2022 08:11:54 +0900</lastBuildDate>
     <generator>Jekyll v3.9.2</generator>
     
       <item>
@@ -174,14 +174,16 @@ patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하�
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;이번 에러메시지 너무 길어서 마지막 줄만 긁어옴; 이번은 타입에러다.&lt;br /&gt;
 근데 책에 나온 에러는 import error였기 때문에… 뭔가 버전차이가 또 있겠거니&lt;br /&gt;
-일단 내 에러메시지의 원인은 저 view 연결하는 부분인 것으로 보여서 뚝딱뚝딱 또 고쳐봤다.&lt;br /&gt;&lt;/p&gt;
+일단 내 에러메시지의 원인은 urls에서 view 연결하는 부분인 것으로 보여서&lt;br /&gt;
+책에 나온 import error랑 같이 뚝딱뚝딱 또 고쳐봤다.&lt;br /&gt;
+(정규식이 사라진 이유는 버전차이 때문인지 그걸로 계속 오류가 나서…ㅠ)&lt;br /&gt;&lt;/p&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.urls&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;lists.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;urlpatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;# path('admin/', admin.site.urls),
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'^$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'home'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'home'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;home_page가 계속 None 상태면 또 오류가 날 것이 분명하므로 이번에는 이쪽도 바꿔준다.&lt;br /&gt;&lt;/p&gt;
@@ -191,10 +193,17 @@ patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하�
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;그런데… 이번엔 다시 url 패턴 에러로 돌아가고 만다.&lt;br /&gt;
-대관절 무엇이 문제란 말인가ㅠ 버전 때문에 너무 뭘 많이 바꿔서…? 그래서 그런가??&lt;br /&gt;
-여기서 계속 막혀서 해결할 때까지 기록은 좀 쉬고… 일단 나머지 책을 읽어만 놓고 추후 수정을 해야겠음&lt;br /&gt;
-아 정말 개발 너무 싫다! ^^ㅗㅗㅗ&lt;/p&gt;
+&lt;p&gt;그리고 드디어 테스트를 통과했다.&lt;br /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-command&quot;&gt;Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+Destroying test database for alias 'default'...
+&lt;/code&gt;&lt;/pre&gt;
 </description>
         <pubDate>Tue, 03 May 2022 00:00:00 +0900</pubDate>
         <link>http://localhost:4000/2022/tdd-study-week-2/</link>
@@ -413,17 +422,17 @@ FAILED (failures=1)
 &lt;/ul&gt;
 </description>
         <pubDate>Fri, 29 Apr 2022 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/2022/tdd-study-chapter-01/</link>
-        <guid isPermaLink="true">http://localhost:4000/2022/tdd-study-chapter-01/</guid>
+        <link>http://localhost:4000/2022/tdd-study-week-1/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/tdd-study-week-1/</guid>
         
         
       </item>
     
       <item>
-        <title>TDD Study Chapter 00</title>
+        <title>TDD Study : week 0</title>
         <description>&lt;p&gt;이것은 TDD 스터디를 위한 포스팅 그 대서사시의 시작…&lt;br /&gt;
 이제까지 개인 확인용으로 정리하는 문서 외에 기술블로그는 따로 만들어 본 일이 없어서 그런지 지금 굉장히 비어있는 무대에 홀로 서서 아무도 듣지 않는 발표를 하는 기분임&lt;br /&gt;
-아무튼 누군가 볼 것이라는 전제하에 넋두리와 설명조를 곁들여 정리해보도록 하겠다. 그게 기술 블로그의… 그 뭐냐… 정체성? 뭐 그런? 거니까? 요?&lt;br /&gt;
+아무튼 누군가 볼 것이라는 전제하에 넋두리와 설명조를 곁들여 정리해보도록 하겠다. 그게 기술 블로그의… 그 뭐냐… 정체성? 뭐 그런? 거니까?&lt;br /&gt;
 이렇게 장황하게 설명하면서 시작하는 거 너무 별론데 본론부터 적자니 또 민망해서 아무튼 그냥 써봤음&lt;br /&gt;
 포스팅이 굉장히 못생겨질 예정인데 아직 지킬 다루는 게 능숙치 않아서 그러하다. 하지만 귀찮아서 그냥 그대로 둘 예정이다 아마도…&lt;br /&gt;
 이렇게 없어보이는 내용에 바로 공부한 내용을 이어 쓰면 더 별로일 것 같아서 이쯤에 글을 쪼개 보도록 하겠음&lt;br /&gt;
@@ -431,8 +440,8 @@ FAILED (failures=1)
 투비컨티뉴…&lt;br /&gt;&lt;/p&gt;
 </description>
         <pubDate>Fri, 29 Apr 2022 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/2022/tdd-study-chapter-00/</link>
-        <guid isPermaLink="true">http://localhost:4000/2022/tdd-study-chapter-00/</guid>
+        <link>http://localhost:4000/2022/tdd-study-week-0/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/tdd-study-week-0/</guid>
         
         
       </item>
