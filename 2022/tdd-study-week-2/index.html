@@ -100,7 +100,7 @@ Chapter 03. 단위 테스트를 이용한 간단한 홈페이지 테스트
   <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
   <meta name="theme-color" content="#ffffff">
   
-  <link rel="stylesheet" href="/css/main.css?1651587723788841000">
+  <link rel="stylesheet" href="/css/main.css?1651619514910456000">
   <link rel="canonical" href="http://localhost:4000/2022/tdd-study-week-2/">
   <link rel="alternate" type="application/rss+xml" title="Write What You Know" href="/feed.xml">
 </head>
@@ -361,14 +361,16 @@ patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하�
 </code></pre>
 <p>이번 에러메시지 너무 길어서 마지막 줄만 긁어옴; 이번은 타입에러다.<br />
 근데 책에 나온 에러는 import error였기 때문에… 뭔가 버전차이가 또 있겠거니<br />
-일단 내 에러메시지의 원인은 저 view 연결하는 부분인 것으로 보여서 뚝딱뚝딱 또 고쳐봤다.<br /></p>
+일단 내 에러메시지의 원인은 urls에서 view 연결하는 부분인 것으로 보여서<br />
+책에 나온 import error랑 같이 뚝딱뚝딱 또 고쳐봤다.<br />
+(정규식이 사라진 이유는 버전차이 때문인지 그걸로 계속 오류가 나서…ㅠ)<br /></p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">from</span> <span class="nn">lists.views</span> <span class="kn">import</span> <span class="n">home_page</span>
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># path('admin/', admin.site.urls),
-</span>    <span class="n">path</span><span class="p">(</span><span class="sa">r</span><span class="s">'^$'</span><span class="p">,</span> <span class="n">home_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
+</span>    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">home_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
 <span class="p">]</span>
 </code></pre></div></div>
 <p>home_page가 계속 None 상태면 또 오류가 날 것이 분명하므로 이번에는 이쪽도 바꿔준다.<br /></p>
@@ -378,10 +380,17 @@ patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하�
 </span><span class="k">def</span> <span class="nf">home_page</span><span class="p">():</span>
     <span class="k">pass</span>
 </code></pre></div></div>
-<p>그런데… 이번엔 다시 url 패턴 에러로 돌아가고 만다.<br />
-대관절 무엇이 문제란 말인가ㅠ 버전 때문에 너무 뭘 많이 바꿔서…? 그래서 그런가??<br />
-여기서 계속 막혀서 해결할 때까지 기록은 좀 쉬고… 일단 나머지 책을 읽어만 놓고 추후 수정을 해야겠음<br />
-아 정말 개발 너무 싫다! ^^ㅗㅗㅗ</p>
+<p>그리고 드디어 테스트를 통과했다.<br /></p>
+
+<pre><code class="language-command">Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+Destroying test database for alias 'default'...
+</code></pre>
 
   </section>
   
@@ -396,7 +405,7 @@ patterns는 생략해도 제대로 작동하도록 바뀌었으므로 제거하�
 </footer>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="/js/main.js?1651587723788841000"></script>
+<script type="text/javascript" src="/js/main.js?1651619514910456000"></script>
 
 
     </div>

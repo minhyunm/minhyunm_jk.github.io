@@ -18,7 +18,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2022/tdd-study-chapter-01/</loc>
+      <loc>http://localhost:4000/2022/tdd-study-week-1/</loc>
       
         <lastmod>2022-04-29T00:00:00+09:00</lastmod>
       
@@ -33,7 +33,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2022/tdd-study-chapter-00/</loc>
+      <loc>http://localhost:4000/2022/tdd-study-week-0/</loc>
       
         <lastmod>2022-04-29T00:00:00+09:00</lastmod>
       
@@ -53,7 +53,7 @@
     <url>
       <loc>http://localhost:4000/feed.xml</loc>
       
-        <lastmod>2022-05-03T23:22:03+09:00</lastmod>
+        <lastmod>2022-05-04T08:11:54+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -68,7 +68,7 @@
     <url>
       <loc>http://localhost:4000/humans.txt</loc>
       
-        <lastmod>2022-05-03T23:22:03+09:00</lastmod>
+        <lastmod>2022-05-04T08:11:54+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -85,7 +85,7 @@
     <url>
       <loc>http://localhost:4000/js/main.js</loc>
       
-        <lastmod>2022-05-03T23:22:03+09:00</lastmod>
+        <lastmod>2022-05-04T08:11:54+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -100,7 +100,7 @@
     <url>
       <loc>http://localhost:4000/css/main.css</loc>
       
-        <lastmod>2022-05-03T23:22:03+09:00</lastmod>
+        <lastmod>2022-05-04T08:11:54+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -119,7 +119,7 @@
     <url>
       <loc>http://localhost:4000/assets/css/style.css</loc>
       
-        <lastmod>2022-05-03T23:22:03+09:00</lastmod>
+        <lastmod>2022-05-04T08:11:54+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
