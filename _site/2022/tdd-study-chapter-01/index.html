@@ -106,7 +106,7 @@ Chapter 01. 기능 테스트를 이용한 Django 설치
   <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
   <meta name="theme-color" content="#ffffff">
   
-  <link rel="stylesheet" href="/css/main.css?1651325286543020000">
+  <link rel="stylesheet" href="/css/main.css?1651587723788841000">
   <link rel="canonical" href="http://localhost:4000/2022/tdd-study-chapter-01/">
   <link rel="alternate" type="application/rss+xml" title="Write What You Know" href="/feed.xml">
 </head>
@@ -299,8 +299,8 @@ capability provided, and no binary flag set on the command line
 즉 프로그래머가 아닌 사람(기획자, QC담당자 등)이 보아도 한 눈에 이해할 수 있도록 주석 등으로 깔끔히 정리가 되어야 한다.<br />
 FT만으로도 요구사항과 특징을 논의할 수 있어야 한다는데, TDD를 통해 개발 시간이 길어질 것을 생각하면 이런 부분에서 문서 단계를 줄이는 게 확실히 효율적일 것 같다.<br />
 <br />
-다시 우리가 만들던 To-Do 사이트로 돌아와서…이 챕터에서는 애자일(Agile) 개발 방식에서 진행하듯이 최소 기능 애플리케이션을 구축해 테스트를 하게 된다.<br />
-먼저 사용자가 작업을 입력하고 이를 저장하는 기능을 구현하기로 한다.<br />
+다시 우리가 만들던 To-Do 사이트로 돌아와서…이 챕터에서는 애자일(Agile) 개발 방식에서 진행하듯이 최소 기능 애플리케이션을 구축해 테스트 하는 것을 쬐끔 맛보기할 수 있다.<br />
+먼저 사용자가 작업을 입력하고 이를 저장하는 기능을 구현하기 위한 준비에 들어간다.<br />
 평소 같으면 바로 모델 설계에 들어갔겠지만 TDD이므로 다른 모든 작업에 앞서 챕터1에서 만들어둔 functional_tets.py 파일에 테스트용 스토리를 추가한다.<br /></p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 
@@ -334,7 +334,7 @@ FT만으로도 요구사항과 특징을 논의할 수 있어야 한다는데, T
 
 </code></pre></div></div>
 <p>추가가 완료되었으면 runserver를 통해 서버를 시작한 뒤 테스트를 실행한다.<br />
-위의 내용을 보면 assertion이 타이틀에서 ‘To-Do’를 찾도록 수정되었는데, 현재 해당 내용은 적용되어 있지 않으므로 오류가 날 것이다.<br />
+위의 내용을 보면 assertion이 타이틀에서 ‘To-Do’를 찾도록 수정되었는데, 현재 해당 내용은 개발되어 있지 않으므로 오류가 날 것이다.<br />
 여기서는 오류 메시지를 좀 더 명확히 표시하기 위해  실제 표시된 타이틀을 함께 출력하도록 추가했다.<br /><br />
 오류 내용은 아래와 같다.<br /></p>
 <pre><code class="language-commandline">AssertionError: Browser title was The install worked successfully! Congratulations!
@@ -424,7 +424,7 @@ FAILED (failures=1)
 </footer>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="/js/main.js?1651325286543020000"></script>
+<script type="text/javascript" src="/js/main.js?1651587723788841000"></script>
 
 
     </div>
