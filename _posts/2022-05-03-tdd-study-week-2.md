@@ -18,7 +18,7 @@ title: 'TDD Study : week 2'
 * 기능 테스트 : 사용자 관점에서 애플리케이션 외부를 테스트<br>
 * 단위 테스트 : 프로그래머 관점에서 애플리케이션 내부를 테스트<br>
 
-즉 어떤 시점에서 테스트를 진행하느냐에 따라 기능/단위 테스트로 나뉘고,<br>
+어떤 시점에서 테스트를 진행하느냐에 따라 기능/단위 테스트로 나뉘고,<br>
 때문에 기능 테스트와 단위 테스트는 테스트 스토리부터 방식, 테스트 대상이 차이가 날 수밖에 없다.<br>
 이전까지 이 둘의 개념이 좀 모호했는데 이렇게 보니 굉장히 확연히 다른 개념이었던 것이다...<br>
 아는 만큼 보인다고... 공부 열심히 해야지... 기승전공부...<br>
@@ -201,3 +201,130 @@ Ran 1 test in 0.000s
 OK
 Destroying test database for alias 'default'...
 ```
+<br>
+이제 url을 통한 접근에 문제가 없음을 확인했으니 이번엔 응답을 위한 단위 테스트를 작성할 차례다.<br>
+이번 테스트는 HTML 형식의 실제 응답을 반환하는 함수를 작성해야 한다.<br>
+lists/tests.py 내용을 아래와 같이 고친다.<br>
+```python
+from django.urls import resolve
+from django.test import TestCase
+from django.http import HttpRequest
+
+from lists.views import home_page
+
+
+class HomePageTest(TestCase):
+
+    def test_root_url_resolves_to_home_page_view(self):
+        found = resolve('/')
+        self.assertEqual(found.func, home_page)
+
+    def test_home_page_returns_correct_html(self):
+        request = HttpRequest()
+        response = home_page(request)
+        self.assertTrue(response.content.startswith(b'<html>'))
+        self.assertIn(b'<title>To-Do lists</title>', response.content)
+        self.assertTrue(response.content.endswith(b'</html>'))
+```
+<br>
+SmokeTest로 되어있던 클래스명을 HomePageTest로 변경하고, 임포트에 HttpRequest를 추가했다.<br>
+그리고 test_home_page_returns_correct_html이라는 함수를 추가했는데, 이 함수는
+
+1. HttpRequest 객체를 생성하여 사용자가 어떤 요청을 브라우저에 보냈는지 확인<br>
+2. 요청을 home_page 뷰에 전달하여 응답을 취득(HttpResponse 인스턴스)<br>
+3. 응답 내용이 특정 html 코드를 가지고 있는지 확인(title 내용에 To-Do lists가 들어있는지 여부 포함)
+
+의 내용을 담고 있다.<br>
+앞서 정리한 대로 단위 테스트는 기능 테스트에 의해 파생된 하위 개념이기 때문에<br>
+더 상세하고, 실제 코드에 가깝다. 즉 프로그래머의 입장에서 진행해야 한다.<br>
+<br>
+아무튼 위의 테스트를 실행하면 아래의 에러가 뜬다.<br>
+```command
+TypeError: home_page() takes 0 positional arguments but 1 was given
+```
+이제 코드의 에러를 한 줄 한 줄 해결해 나갈 차례다.<br>
+오류를 수정하기 위한 최소한의 코드를 변경한 뒤 테스트를 재실행하기를 반복해 나가야 한다.<br>
+책에서는 이 부분을 단위테스트 코드 주기라고 표시했는데,<br>
+개념적으로 볼 때 한 줄씩 코드를 수정해 테스트한 뒤 적용하는 것은 나노 주기,
+단위테스트 단위로 코드를 수정 후 적용하는 것은 RGR 주기라고 이해하고 있어서<br>
+솔직히 여기서 말하는 주기가 어떤 건지 헷갈린다.<br>
+아무튼 시키는 대로 코드 수정을 시작해보도록 한다.<br><br>
+
+코드 수정 : home_page()에 파라미터로 request를 추가한다
+```python
+def home_page(request):
+    pass
+```
+
+테스트 결과
+```command
+self.assertTrue(response.content.startswith(b'<html>'))
+AttributeError: 'NoneType' object has no attribute 'content'
+```
+
+코드 수정 : django.http.HttpResponse를 임포트하여 리턴
+```python
+from django.http import HttpResponse
+
+def home_page(request):
+    return HttpResponse()
+```
+
+테스트 결과
+```command
+self.assertTrue(response.content.startswith(b'<html>'))
+AssertionError: False is not true
+```
+
+코드 수정 : 리턴 내용에 html 코드 추가
+```python
+def home_page(request):
+    return HttpResponse('<html><title>To-Do lists</title>')
+```
+
+테스트 결과
+```command
+self.assertTrue(response.content.endswith(b'</html>'))
+AssertionError: False is not true
+```
+
+코드 수정 : 리턴 코드에 `</html>` 추가
+```python
+def home_page(request):
+    return HttpResponse('<html><title>To-Do lists</title></html>')
+```
+
+테스트 결과
+```command
+Ran 2 tests in 0.001s
+
+OK
+Destroying test database for alias 'default'...
+```
+<br>
+야호!<br>
+왜인지 모르겠지만 책보다 일찍 테스트를 통과했는데 어디서 잘못 썼는지 모르겠고 의도는 파악했으므로 다 된 것으로 여기겠음.<br>
+자 그럼 기존에 작성했던 functional_tests.py를 다시 실행해보도록 하겠다.<br>
+```python
+python functional_tests.py
+```
+
+테스트 결과
+```command
+F
+======================================================================
+FAIL: test_can_start_a_list_and_retrieve_it_later (__main__.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "functional_test.py", line 22, in test_can_start_a_list_and_retrieve_it_later
+    self.fail('Finish the test!')   # 강제로 테스트 실패 발생시키기
+AssertionError: Finish the test!
+
+----------------------------------------------------------------------
+Ran 1 test in 1.282s
+
+FAILED (failures=1)
+```
+성공! Failed로 뜨는 부분은 브라우저 종료를 위해 심어둔 강제 실패때문에 그렇다.<br>
+이 과정에 놀랍게도 또 한 차례 오류를 겪었는데 서버가 내려가있는 걸 까먹고 진행해서...<br>
+다들 런서버를 까먹지 맙시다!<br>

@@ -8,7 +8,7 @@ title: 'TDD Study : week 1'
 환경 : `Mac(M1)`, `Python 3.8.3`,  `Django 4.0.4`,  `Selenium 4.1.3`<br>
 <br>
 각 챕터에 필요한 라이브러리들은 미리 설치를 하고 진행했다.<br>
-셀레니움의 경우 버전 정보가 따로 보이지 않아서 그냥 최신 버전으로 설치해서 활용했고<br>
+셀레늄의 경우 버전 정보가 따로 보이지 않아서 그냥 최신 버전으로 설치해서 활용했고<br>
 파이썬이랑 장고 버전은 책과 달리 제멋대로인데,<br>
 파이썬의 경우 M1에서 3.7 이하 특정 버전들은 활용하기 매우 번거롭고 귀찮기 때문에 대충 3.8 버전대로 진행했고<br>
 그렇다보니 Django 1.7이 파이썬 3.6 이후로는 호환이 안 되어서(HTMLParseError가 남) 이것도 그냥 최신 버전으로 깔았다.<br>
@@ -30,6 +30,7 @@ browser.get('http://localhost:8000')
 
 assert 'Django' in browser.title
 ```
+이 코드를 실행하려면 ```python functional_tests.py```로 진행하면 된다.<br>
 자 그런데 우리는 아직 런서버는커녕 장고 프로젝트를 만들지도 않았다.<br>
 그러니까  위의 코드를 실행하면 파이어폭스 창이 뜨면서 '연결할 수 없음'이 떠야 정상...이지만<br>
 어째서인지 나의 터미널에는 FileNoeFoundError: [Errno 2] No such file or directory: 'geckodriver'가 뜬다.<br>
@@ -76,7 +77,7 @@ django-admin startproject superlists
 ```
 여기서 주의할 점 : 책에서는 django-admin.py 를 써서 만들라고 되어있지만 그대로 했다간 이건 더 이상 지원이 되지 않는다는 뭐 그런 비슷한 경고를 직면하게 된다.<br>
 경고만 뜨고 플젝생성은 제대로 해주긴 하는데 아무튼 장고에서 바꿔달라고 하니까 .py는 빼고 바꿔주는 게 정신건강에 좋을 듯하다.<br><br>
-그 뒤엔 아까 만든 functional_tests.py를 프로젝트 내부 바닥 위치에 옮겨주고(mv 명령어를 쓰시든 그냥 복사붙여넣기 하시든 취향껏 하시라)<br>
+그 뒤엔 아까 만든 functional_tests.py를 프로젝트 내부 바닥 위치에 옮겨주고(mv 명령어를 쓰시든 그냥 복사붙여넣기 하시든 취향껏... 근데 이때 에디터 프로젝트 베이스 폴더 위치를 새 위치로 변경해줘야 추후 장고 코드 쓸 때 임포트가 제대로 된다)<br>
 우리의 칭구 runserver를 입력한다.
 ```commandline
 python manage.py runserver
@@ -105,7 +106,7 @@ FT만으로도 요구사항과 특징을 논의할 수 있어야 한다는데, T
 <br>
 다시 우리가 만들던 To-Do 사이트로 돌아와서...이 챕터에서는 애자일(Agile) 개발 방식에서 진행하듯이 최소 기능 애플리케이션을 구축해 테스트 하는 것을 쬐끔 맛보기할 수 있다.<br>
 먼저 사용자가 작업을 입력하고 이를 저장하는 기능을 구현하기 위한 준비에 들어간다.<br>
-평소 같으면 바로 모델 설계에 들어갔겠지만 TDD이므로 다른 모든 작업에 앞서 챕터1에서 만들어둔 functional_tets.py 파일에 테스트용 스토리를 추가한다.<br>
+평소 같으면 바로 모델 설계에 들어갔겠지만 TDD이므로 다른 모든 작업에 앞서 챕터1에서 만들어둔 functional_tests.py 파일에 테스트용 스토리를 추가한다.<br>
 ```python
 from selenium import webdriver
 
@@ -211,8 +212,3 @@ Ran 1 test in 2.095s
 
 FAILED (failures=1)
 ```
-<br><br>
-
-#### 유용한 TDD 개념
-* 사용자 스토리(User story) : 사용자 관점에서 어떻게 애플리케이션이 동작해야 하는지 기술한 것. 기능 테스트 구조화를 위해 사용
-* 예측된 실패(Expected failure) : 의도적으로 구현한 테스트 실패
