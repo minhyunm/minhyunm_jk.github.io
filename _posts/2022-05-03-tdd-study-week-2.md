@@ -328,3 +328,270 @@ FAILED (failures=1)
 성공! Failed로 뜨는 부분은 브라우저 종료를 위해 심어둔 강제 실패때문에 그렇다.<br>
 이 과정에 놀랍게도 또 한 차례 오류를 겪었는데 서버가 내려가있는 걸 까먹고 진행해서...<br>
 다들 런서버를 까먹지 맙시다!<br>
+<br>
+### Chapter 04. 왜 테스트를 하는 것인가?<br>
+챕터 4의 소제목이 갑자기 뜬금없이 원론적인 질문인 이유는 아마도<br>
+이 쯤에서 한 줄씩 마이크로 수정을 거치는 방식에 회의감을 느끼고 TDD 때려칠까 고민하는 나 같은 사람들을 위해(역시 나만 그런 게 아니었지) 저자가 친절한 설명을 곁들였기 때문일 것이다(이 내용에 약 3p를 할애하심).<br>
+대략 요약하면 지금 고생해 두면 테스트가 나를 대신해 궂은 일들을 해줄 것이다,<br>
+TDD를 익히는 것은 훈련이 필요하기 때문에 자잘한 내용부터 시작해야 한다,<br>
+테스트의 틀을 잘 만들어두면 새로운 테스트를 추가할 때 활용하기 좋다 기타등등.<br>
+맞는 말임을 알면서도 한 편으론 약간 도자기 깨는 장인이 하는 소리 같다는 생각을 떨칠 수가 없는데<br>
+그래 뭐... 나만 그런 게 아니라니 아무튼 힘을 내 본다.<br>
+<br>
+아무튼 다시 테스트로 돌아가서...<br>
+챕터 3에 진행한 내용에다가 이어서 코드를 짜야 하기 때문에 저자는 런서버를 통해 서버를 가동할 것을 강조한다. 바로 열댓 줄 위에 똑같은 소리를 했었기 때문에 약간 인제 야너두 상태가 되면서 나 자신을 너그럽게 봐주게 됨<br>
+자 그럼 이제 이어서 테스트를 마무리해 보자. 코드를 손봐야 한다.<br>
+책 내용대로라면 대충 키 입력 처리를 위한 임포트문 하나가 늘어났고 중간에 h1 내용 확인하는 항목 포함 상세 항목들이 추가됐다.<br>
+자 근데<br>
+오류없이 한 방에 수정이 될 리가<br>
+없죠<br>
+이제 라이브러리 함수 뭐 하나 칠 때마다 호환 안 될까봐 심장이 쫄깃해짐 근데 웃긴건 그 예감 틀리지를 않음<br>
+아니나다를까 find_element_by_tag_name에 줄이 쫙쫙 가는 것이다.<br>
+대충 보니까 함수 형태가 이제 바뀐 모양임...<br>
+find_element(by=By.TAG_NAME, value='값') 으로 바꿔달라고 하니 참고하시면 좋을듯 (import도 하나 더 추가해야 함...)<br>
+그리하여 결과적으로 아래와 같은 코드를 작성하게 된다.<br>
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import unittest
+
+
+class NewVisitorTest(unittest.TestCase):
+    # 테스트 시작 전에 자동호출되는 특수 메소드
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)     # 암묵적 대기 3초(로딩대기)
+
+    # 테스트 완료 후에 자동호출되는 특수 메소드
+    def tearDown(self):
+        self.browser.quit()
+
+    # test로 시작하는 모든 메소드는 테스트 메소드이며 클래스당 하나 이상의 테스트 메소드 작성 가능
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # 유저가 웹사이트를 확인한다
+        self.browser.get('http://localhost:8000')
+
+        # 웹 페이지 타이틀과 헤더가 'To-Do'를 표시하고 있다
+        self.assertIn('To-Do', self.browser.title)  # 테스트용 어설션을 위해 assertIn 사용
+        header_text = self.browser.find_element(by=By.TAG_NAME, value='h1').text
+        self.assertIn('To-Do', header_text)
+
+        # 유저가 작업을 추가하기로 한다
+        inputbox = self.browser.find_element(by=By.ID, value='id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            '작업 아이템 입력'
+        )
+
+        # 할일 내용을 텍스트 상자에 입력한다 (예: 공작깃털 사기)
+        inputbox.send_keys('공작깃털 사기')
+        
+        # 엔터키를 치면 페이지가 갱신되고 작업 목록에 해당 할일 내용이
+        # "1: 공작깃털 사기" 형식으로 추가된다
+        inputbox.send_keys(Keys.ENTER)
+        
+        table = self.browser.find_element(by=By.ID, value='id_list_table')
+        rows = table.find_elements(by=By.TAG_NAME, value='tr')
+        self.assertTrue(
+            any(row.text == '1: 공작깃털 사기' for row in rows),
+        )
+
+        # 추가 아이템을 입력할 수 있는 여분의 텍스트 상자가 존재한다
+        # 다른 할일을 입력한다(예: "공작깃털을 이용해서 그물 만들기")
+        self.fail('Finish the test!')  # 강제로 테스트 실패 발생시키기
+
+[...]
+```
+위의 내용을 테스트해 보면 h1을 찾지 못해서 아래와 같은 오류가 뜬다.<br>
+```command
+selenium.common.exceptions.NoSuchElementException: Message: Unable to locate element: h1
+Stacktrace:
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.jsm:183:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.jsm:395:5
+element.find/</<@chrome://remote/content/marionette/element.js:300:16
+```
+여기까지 왔으면 테스트는 제대로 작성한 것이고 이에 맞춰 코드를 수정해야 한다.<br>
+그런데 이쯤에서 떠올려야 할 규칙사항 : <b>상수는 테스트하지 마라</b><br>
+이것은 단위 테스트를 할 때의 일반적인 규칙 중 하나라고 한다. 다들 나만 빼고 언제 그런 규칙을... 정한 거야...?<br>
+정리하자면 로직이나 흐름 제어, 설정 등을 테스트하기 위한 단위 테스트에서 특정 문자열을 체크하는 것이 의미가 없기 때문이라고 한다. 이런 경우는 템플릿을 이용하여 구문 검증을 하는 편이 더 효율적이라고. 듣고 보니 그러하다.<br>
+<br>
+이런 설명이 구구절절 나온 것은 당연하게도 모두 템플릿 테스트 코드를 작성하기 위한 밑밥이다.<br>
+지금부터 템플릿을 사용하기 위한 리팩터링(Refactoring, 기능을 바꾸지 않고 코드 자체를 개선하는 작업)에 들어간다.
+지금까지도 충분히 한 줄씩 수정을 해 왔지만, 리펙터링 작업을 할 때는 기존에 잘 되던 기능이 바뀌면 안 되기 때문에 특히 더더욱 조심해서 한 번에 한 가지씩만 수정을 해야 한다고 하니 참고하자.<br>
+<br>
+리펙터링을 진행하기 위해서는 먼저 그 자체로 이미 테스트를 무사히 통과하는 코드가 필요한데<br>
+우리의 코드는 알다시피 테스트를 통과했다. 따라서 작업내용을 표시할 템플릿 파일을 만들러 간다.<br>
+<br>
+지금까지 작업한 lists 앱 폴더 하위에 templates 폴더를 생성하고, home.html 파일을 만든다.<br>
+```html
+<html>
+    <title>To-Do lists</title>
+</html>
+```
+그리고 views.py 파일에도 렌더 페이지 부분을 추가해 준다.
+```python
+from django.shortcuts import render
+from django.http import HttpResponse
+
+
+def home_page(request):
+    return render(request, 'home.html')
+```
+그리고 `python manage.py test`로 확인해 본다.
+```command
+======================================================================
+ERROR: test_home_page_returns_correct_html (lists.tests.HomePageTest)
+----------------------------------------------------------------------
+...
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: home.html
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+```
+중간에 상세한 오류는 생략하고... 대략적으로 템플릿을 못 찾는다는 의미임<br>
+왜 못찾느냐 그것은 우리가 settings.py를 손대지 않았기 때문이다.<br>
+장고 좀 건드려 본 사람들은 모두 아는 국룰 제1항 그것은 INSTALLED_APPS에 앱이름 추가하기...<br>
+이 책은 이제까지 현란한 한 줄 코드 수정을 선보이며 나의 혼을 쏙 빼놓아서 앱 추가조차 까먹게 만들고는... 이제 와서 앱을 추가 안 했잖니^^라며... 나를 놀린 것이다... 농락당한 기분인걸...? 
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'lists',
+]
+```
+옜소<br>
+이제 됐겠지?
+```command
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+```
+됐당<br>
+다음은 상수를 테스트하지 않고 템플릿을 이용해서 렌더링하는 것을 테스트하도록 수정해주어야 하...는데 장고의 render_to_string을 쓰면 쉽다고 한다. lists/tests.py 파일을 다음과 같이 수정한다.
+```python
+from django.urls import resolve
+from django.test import TestCase
+from django.http import HttpRequest
+from django.template.loader import render_to_string
+
+from lists.views import home_page
+
+class HomePageTest(TestCase):
+
+    def test_root_url_resolves_to_home_page_view(self):
+        found = resolve('/')
+        self.assertEqual(found.func, home_page)
+
+    def test_home_page_returns_correct_html(self):
+        request = HttpRequest()
+        response = home_page(request)
+        expected_html = render_to_string('home.html')
+        self.assertEqual(response.content.decode(), expected_html)
+```
+리스폰스 콘텐트의 바이트 데이터를 .decode() 함수를 써서 유니코드로 변환하고, 문자열 대 문자열로 비교를 거친다. 여기서 중요한 점은 상수가 아닌 구현 결과물을 비교하는 것이다.<br>
+단위 테스트 수정이 끝났다면 이제 다시 home.html 템플릿에 부족한 내용을 추가하러 간다.
+```html
+<html>
+    <head>
+        <title>To-Do lists</title>
+    </head>
+    <body>
+        <h1>Your To-Do list</h1>
+    </body>
+</html>
+```
+기본적인 구조 추가와 더불어 h1 태그를 추가해 주었다. 이제 기능 테스트를 다시 돌려 보면
+```command
+selenium.common.exceptions.NoSuchElementException: Message: 
+Unable to locate element: [id="id_new_item"]
+```
+그려 고마우이<br>
+다음 내용을 수정한다.
+```html
+<html>
+    <head>
+        <title>To-Do lists</title>
+    </head>
+    <body>
+        <h1>Your To-Do list</h1>
+        <input id="id_new_item" />
+    </body>
+</html>
+```
+다시 테스트
+```command
+Traceback (most recent call last):
+  File "functional_tests.py", line 29, 
+	in test_can_start_a_list_and_retrieve_it_later
+    self.assertEqual(
+AssertionError: '' != '작업 아이템 입력'
++ 작업 아이템 입력
+```
+아니 망할 거 알면서 테스트 돌려야 하는 과정 너무 스트레스다<br>
+아무튼 다음 내용을 고치러 간다.
+```html
+<html>
+    <head>
+        <title>To-Do lists</title>
+    </head>
+    <body>
+        <h1>Your To-Do list</h1>
+        <input id="id_new_item" placeholder="작업 아이템 입력" />
+    </body>
+</html>
+```
+테스트 결과
+```command
+
+selenium.common.exceptions.NoSuchElementException: 
+Message: Unable to locate element: [id="id_list_table"]
+```
+그려 고마우이...<br>
+이제 테이블을 추가한다.
+```html
+<html>
+    <head>
+        <title>To-Do lists</title>
+    </head>
+    <body>
+        <h1>Your To-Do list</h1>
+        <input id="id_new_item" placeholder="작업 아이템 입력" />
+        <table id="id_list_table">
+        </table>
+    </body>
+</html>
+```
+테스트 결과
+```command
+Traceback (most recent call last):
+  File "functional_tests.py", line 43, in test_can_start_a_list_and_retrieve_it_later
+    self.assertTrue(
+AssertionError: False is not true
+```
+으잉 갑자기 이건 뭐지<br>
+다행히 책에도 똑같은 에러가 나고 있다. 오류 내용을 명확히 보기 위해 기능 테스트 파일의 assertTrue 함수에 실패 메시지를 정의해 준다.
+```python
+[...]
+rows = table.find_elements(by=By.TAG_NAME, value='tr')
+        self.assertTrue(
+            any(row.text == '1: 공작깃털 사기' for row in rows),
+            "신규 작업이 테이블에 표시되지 않는다"
+        )
+[...]
+```
+다시 테스트
+```command
+AssertionError: False is not true : 신규 작업이 테이블에 표시되지 않는다
+```
+야쓰<br>
+이 내용은 폼 제출 처리를 구현해야 하기 때문에 다음 챕터로 넘어간다.<br>
+길었던 3-4챕터가 이렇게 마무리되고... 나의 하루도... 마무리된다... 이제 잘 수 있어...<br>
